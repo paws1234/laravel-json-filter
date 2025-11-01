@@ -135,13 +135,9 @@ class UnifiedAdapterTest extends TestCase
         $this->assertCount(3, $results);
         
         foreach ($results as $user) {
-            // Debug: let's see what properties actually exist
-            $properties = array_keys(get_object_vars($user));
-            
-            $this->assertTrue(property_exists($user, 'user_name'), 
-                'user_name property missing. Available properties: ' . implode(', ', $properties));
-            $this->assertTrue(property_exists($user, 'user_status'), 
-                'user_status property missing. Available properties: ' . implode(', ', $properties));
+            // Check that the selected JSON fields are accessible via Eloquent's magic methods
+            $this->assertNotNull($user->user_name, 'user_name should be accessible');
+            $this->assertNotNull($user->user_status, 'user_status should be accessible');
             $this->assertNotEmpty($user->user_name);
             $this->assertNotEmpty($user->user_status);
         }
@@ -166,8 +162,8 @@ class UnifiedAdapterTest extends TestCase
         $this->assertGreaterThanOrEqual(1, $results->count());
         
         foreach ($results as $user) {
-            $this->assertTrue(property_exists($user, 'name'));
-            $this->assertTrue(property_exists($user, 'score'));
+            $this->assertNotNull($user->name, 'name should be accessible');
+            $this->assertNotNull($user->score, 'score should be accessible');
         }
     }
 

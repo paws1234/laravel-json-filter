@@ -66,7 +66,7 @@ class GenericAdapter extends DatabaseAdapter
         $column = $this->extractColumn($keyPath);
         $alias = $alias ?? $column;
         
-        return $this->builder->addSelect($this->builder->getConnection()->raw("$column as $alias"));
+        return $this->builder->addSelectRaw("$column as $alias");
     }
 
     public function ensureSelectAll(): void

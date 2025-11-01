@@ -68,7 +68,7 @@ class PostgreSQLAdapter extends DatabaseAdapter
         $this->ensureSelectAll();
         $expr = $this->convertPath($keyPath);
         $alias = $alias ?? str_replace(['->', '.'], '_', $keyPath);
-        return $this->builder->addSelect($this->builder->getConnection()->raw("$expr as $alias"));
+        return $this->builder->addSelectRaw("$expr as $alias");
     }
 
     public function ensureSelectAll(): void

@@ -85,7 +85,7 @@ class MySQLAdapter extends DatabaseAdapter
         $alias = $alias ?? str_replace(['->', '.'], '_', $keyPath);
         
         $expr = "JSON_UNQUOTE(JSON_EXTRACT($column, '$.$path')) as $alias";
-        return $this->builder->addSelect($this->builder->getConnection()->raw($expr));
+        return $this->builder->addSelectRaw($expr);
     }
 
     public function ensureSelectAll(): void
