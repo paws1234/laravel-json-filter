@@ -4,6 +4,8 @@ All notable changes to `laravel-json-filter` will be documented in this file.
 
 ## [Unreleased]
 
+## [1.3.1] - 2025-11-01
+
 ### Added
 - Laravel 12.x support
 - PHP 8.4 support
@@ -15,6 +17,11 @@ All notable changes to `laravel-json-filter` will be documented in this file.
 - Updated composer dependencies to support Laravel 12.x
 - Expanded GitHub Actions matrix to include Laravel 12 testing
 - Updated documentation to reflect Laravel 12 compatibility
+
+### Fixed
+- PHPUnit 11 compatibility issues and deprecation warnings
+- Test method naming conventions updated for PHPUnit 11
+- PHPUnit configuration schema updated to latest version
 
 ### Compatibility
 - PHP: ^8.1|^8.2|^8.3|^8.4
