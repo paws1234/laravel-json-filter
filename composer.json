@@ -1,7 +1,7 @@
 {
     "name": "pawsmedz/laravel-json-filter",
-    "description": "Dynamic JSON filtering for Eloquent Builder (MySQL & PostgreSQL).",
-    "keywords": ["laravel", "json", "eloquent", "filter", "query"],
+    "description": "Universal JSON/Document filtering for ANY database type - SQL, NoSQL, Graph databases and more.",
+    "keywords": ["laravel", "json", "eloquent", "filter", "query", "mysql", "postgresql", "mongodb", "nosql", "document", "unified", "database-agnostic"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -32,8 +32,12 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Pawsmedz\\JsonFilter\\JsonFilterServiceProvider"
+                "Pawsmedz\\JsonFilter\\UnifiedJsonFilterServiceProvider"
             ]
+        },
+        "suggest": {
+            "jenssegers/mongodb": "For MongoDB support",
+            "laravel-mongodb/laravel-mongodb": "Alternative MongoDB package"
         }
     },
     "scripts": {

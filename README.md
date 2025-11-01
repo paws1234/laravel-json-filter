@@ -4,16 +4,18 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/paws1234/laravel-json-filter/tests?label=tests&style=flat-square)](https://github.com/paws1234/laravel-json-filter/actions?query=workflow%3Atests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/pawsmedz/laravel-json-filter.svg?style=flat-square)](https://packagist.org/packages/pawsmedz/laravel-json-filter)
 
-A Laravel package that provides fluent, database-agnostic JSON querying macros for Eloquent and Query Builder. Seamlessly work with JSON columns across MySQL, PostgreSQL, and SQLite with a consistent, expressive API.
+A Laravel package that provides truly universal JSON/Document querying macros for ANY database type. The first Laravel package that works consistently across SQL, NoSQL, Graph, and document databases with a unified, expressive API.
 
 ## Features
 
-- 🔍 **Database Agnostic**: Works seamlessly with MySQL, PostgreSQL, and SQLite
-- 🎯 **Fluent API**: Clean, expressive syntax for JSON queries
-- 🚀 **Multiple Macros**: Filter, select, order, search, and check existence
-- 🔧 **Easy Integration**: Auto-discovery service provider
-- 🧪 **Well Tested**: Comprehensive test suite
+- 🌍 **Truly Universal**: Works with ANY database - SQL (MySQL, PostgreSQL, SQLite), NoSQL (MongoDB, DocumentDB), and more
+- 🔄 **Auto-Detection**: Automatically detects your database type and uses the optimal query strategy
+- 🎯 **Unified API**: Same syntax works across all database types - no need to learn different query methods
+- 🚀 **Extensible**: Easy to add new database adapters
+- 🔧 **Zero Configuration**: Auto-discovery service provider with intelligent adapter selection
+- 🧪 **Well Tested**: Comprehensive test suite across multiple database types  
 - 📦 **Laravel Compatible**: Supports Laravel 9.x, 10.x, and 11.x
+- ⚡ **Performance Optimized**: Database-specific optimizations for each adapter
 
 ## Installation
 
@@ -154,36 +156,108 @@ $results = User::query()
     ->get();
 ```
 
-## Database Support
+## Universal Database Support
 
-The package automatically detects your database driver and uses the appropriate JSON syntax:
+The package automatically detects your database type and uses the optimal query strategy:
 
-### MySQL
+### 🗄️ SQL Databases
+
+#### MySQL
 ```sql
 -- jsonFilter('meta->status', '=', 'active')
 WHERE JSON_UNQUOTE(JSON_EXTRACT(meta, '$.status')) = 'active'
-
--- jsonSelect('meta->status as user_status')
-SELECT JSON_UNQUOTE(JSON_EXTRACT(meta, '$.status')) as user_status
 ```
 
-### PostgreSQL
+#### PostgreSQL
 ```sql
--- jsonFilter('meta->status', '=', 'active')
+-- jsonFilter('meta->status', '=', 'active') 
 WHERE meta->>'status' = 'active'
-
--- jsonSelect('meta->status as user_status')
-SELECT meta->>'status' as user_status
 ```
 
-### SQLite
-Falls back to basic column operations for compatibility.
+#### SQLite
+```sql
+-- Graceful fallback to LIKE operations
+WHERE meta LIKE '%active%'
+```
+
+### 🍃 NoSQL Databases
+
+#### MongoDB
+```javascript
+// jsonFilter('profile->country', '=', 'US')
+{ "profile.country": "US" }
+
+// jsonContains('skills', 'php')  
+{ "skills": { $regex: /php/i } }
+```
+
+#### DocumentDB
+```javascript
+// Same syntax as MongoDB - seamless compatibility
+{ "metadata.status": "active" }
+```
+
+### 🔄 Graph Databases
+Support for Neo4j and ArangoDB can be added with custom adapters.
+
+### 🗂️ Key-Value Stores  
+Redis hash operations and DynamoDB attribute paths supported via adapters.
+
+### ✨ The Magic
+**One syntax, any database:**
+```php
+// This exact code works on MySQL, PostgreSQL, MongoDB, and more!
+User::jsonFilter('profile->country', '=', 'US')
+    ->jsonContains('skills', 'php')
+    ->jsonExists('subscription->plan')
+    ->get();
+```
 
 ## Requirements
 
 - PHP 8.1 or higher
 - Laravel 9.x, 10.x, or 11.x
-- MySQL, PostgreSQL, or SQLite database
+- Any supported database (MySQL, PostgreSQL, SQLite, MongoDB, etc.)
+
+## Optional Database Packages
+
+For enhanced NoSQL support, install the relevant packages:
+
+```bash
+# For MongoDB
+composer require jenssegers/mongodb
+
+# Alternative MongoDB package  
+composer require laravel-mongodb/laravel-mongodb
+
+# More database packages as needed
+```
+
+## Extending Support
+
+Add support for new databases by creating custom adapters:
+
+```php
+use Pawsmedz\JsonFilter\Adapters\DatabaseAdapter;
+use Pawsmedz\JsonFilter\Adapters\AdapterFactory;
+
+class MyCustomAdapter extends DatabaseAdapter {
+    public function supports($builder): bool {
+        // Detection logic
+        return str_contains(get_class($builder->getConnection()), 'MyDB');
+    }
+    
+    public function filter($keyPath, $operator, $value) {
+        // Custom query logic
+        return $this->builder->where($this->convertPath($keyPath), $operator, $value);
+    }
+    
+    // Implement other methods...
+}
+
+// Register your adapter
+AdapterFactory::registerAdapter(MyCustomAdapter::class);
+```
 
 ## Testing
 
