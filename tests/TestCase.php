@@ -23,6 +23,10 @@ abstract class TestCase extends BaseTestCase
     protected function loadMigrations(): void
     {
         $schema = $this->app['db']->connection()->getSchemaBuilder();
+
+        if ($schema->hasTable('users')) {
+            $schema->drop('users');
+        }
         $schema->create('users', function ($table) {
             $table->id();
             $table->json('meta')->nullable();

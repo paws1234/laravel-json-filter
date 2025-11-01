@@ -17,7 +17,6 @@ jobs:
         laravel: [9.*, 10.*, 11.*]
         db: [mysql, pgsql]
         exclude:
-          # Exclude unsupported combos
           - php: 8.1
             laravel: 11.*
 
@@ -25,10 +24,11 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
         ports: ["3306:3306"]
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -75,5 +75,5 @@ jobs:
           DB_PORT: ${{ matrix.db == 'mysql' && 3306 || 5432 }}
           DB_DATABASE: test
           DB_USERNAME: ${{ matrix.db == 'mysql' && 'root' || 'postgres' }}
-          DB_PASSWORD: ${{ matrix.db == 'mysql' && '' || 'postgres' }}
+          DB_PASSWORD: ${{ matrix.db == 'mysql' && 'root' || 'postgres' }}
         run: composer test
