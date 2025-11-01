@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="vendor/autoload.php"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
          colors="true"
-         stopOnFailure="false"
-         failOnWarning="true"
-         failOnRisky="true">
+         verbose="true"
+         executionOrder="depends,defects"
+         failOnRisky="true"
+         failOnWarning="true">
+
     <testsuites>
-        <testsuite name="Package Tests">
-            <directory>./tests</directory>
+        <testsuite name="Json Filter Test Suite">
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
+
+    <coverage cacheDirectory=".phpunit.cache/coverage"
+              processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <html outputDirectory="coverage/html"/>
+            <text outputFile="coverage/summary.txt"/>
+        </report>
+    </coverage>
 
     <php>
         <env name="APP_ENV" value="testing"/>

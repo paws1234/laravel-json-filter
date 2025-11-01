@@ -3,30 +3,57 @@
 namespace Pawsmedz\JsonFilter;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Builder;
-use Pawsmedz\JsonFilter\Builder\Macros\JsonFilterMacro;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Pawsmedz\JsonFilter\Builder\Macros\{
+    JsonFilterMacro,
+    JsonOrderByMacro,
+    JsonWhereInMacro,
+    JsonContainsMacro,
+    JsonExistsMacro,
+    JsonSelectMacro
+};
 
 class JsonFilterServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        // Handle Laravel versions where hasMacro() is non-static (Laravel 9/10)
-        $hasMacro = false;
+        $this->registerMacro(EloquentBuilder::class, 'jsonFilter', JsonFilterMacro::class);
+        $this->registerMacro(QueryBuilder::class, 'jsonFilter', JsonFilterMacro::class);
 
+        $this->registerMacro(EloquentBuilder::class, 'jsonOrderBy', JsonOrderByMacro::class);
+        $this->registerMacro(QueryBuilder::class, 'jsonOrderBy', JsonOrderByMacro::class);
+
+        $this->registerMacro(EloquentBuilder::class, 'jsonWhereIn', JsonWhereInMacro::class);
+        $this->registerMacro(QueryBuilder::class, 'jsonWhereIn', JsonWhereInMacro::class);
+
+        $this->registerMacro(EloquentBuilder::class, 'jsonContains', JsonContainsMacro::class);
+        $this->registerMacro(QueryBuilder::class, 'jsonContains', JsonContainsMacro::class);
+
+        $this->registerMacro(EloquentBuilder::class, 'jsonExists', JsonExistsMacro::class);
+        $this->registerMacro(QueryBuilder::class, 'jsonExists', JsonExistsMacro::class);
+
+        $this->registerMacro(EloquentBuilder::class, 'jsonSelect', JsonSelectMacro::class);
+        $this->registerMacro(QueryBuilder::class, 'jsonSelect', JsonSelectMacro::class);
+    }
+
+    protected function registerMacro(string $builderClass, string $name, string $macroClass): void
+    {
+        $instance = app($builderClass);
+
+        $hasMacro = false;
         try {
-            $builderInstance = app(Builder::class);
-            if (method_exists($builderInstance, 'hasMacro')) {
-                $hasMacro = $builderInstance->hasMacro('jsonFilter');
+            if (method_exists($instance, 'hasMacro')) {
+                $hasMacro = $instance->hasMacro($name);
             }
         } catch (\Throwable $e) {
-            // If app(Builder::class) cannot resolve (during boot), fallback
             $hasMacro = false;
         }
 
-        if (!$hasMacro) {
-            // Safe macro registration
-            Builder::macro('jsonFilter', function (string $keyPath, string $operator, $value) {
-                return (new JsonFilterMacro)($this, $keyPath, $operator, $value);
+        if (! $hasMacro) {
+            $builderClass::macro($name, function (...$args) use ($macroClass) {
+                // The macro itself should be callable, not invoked now
+                return (new $macroClass())($this, ...$args);
             });
         }
     }

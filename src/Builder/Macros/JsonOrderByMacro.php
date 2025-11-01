@@ -5,12 +5,9 @@ namespace Pawsmedz\JsonFilter\Builder\Macros;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class JsonFilterMacro
+class JsonOrderByMacro
 {
-    /**
-     * Apply a JSON filter to an Eloquent or Query Builder.
-     */
-    public function __invoke(EloquentBuilder|QueryBuilder $builder, string $keyPath, string $operator, $value)
+    public function __invoke(EloquentBuilder|QueryBuilder $builder, string $keyPath, string $direction = 'asc')
     {
         $driver = $builder->getConnection()->getDriverName();
         $column = $this->extractColumn($keyPath);
@@ -18,20 +15,18 @@ class JsonFilterMacro
 
         switch ($driver) {
             case 'mysql':
-                $jsonExpr = "JSON_UNQUOTE(JSON_EXTRACT($column, '$.$path'))";
+                $expr = "JSON_UNQUOTE(JSON_EXTRACT($column, '$.$path'))";
                 break;
 
             case 'pgsql':
-                $jsonExpr = $this->pgJsonExpression($keyPath);
+                $expr = $this->pgJsonExpression($keyPath);
                 break;
 
             default:
-                // Fallback for SQLite or unsupported drivers
-                $jsonExpr = "$column LIKE ?";
-                $value = "%{$value}%";
+                $expr = $column; // fallback
         }
 
-        return $builder->whereRaw("$jsonExpr {$operator} ?", [$value]);
+        return $builder->orderByRaw("$expr " . strtoupper($direction));
     }
 
     protected function extractColumn(string $keyPath): string

@@ -5,33 +5,29 @@ namespace Pawsmedz\JsonFilter\Builder\Macros;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class JsonFilterMacro
+class JsonSelectMacro
 {
-    /**
-     * Apply a JSON filter to an Eloquent or Query Builder.
-     */
-    public function __invoke(EloquentBuilder|QueryBuilder $builder, string $keyPath, string $operator, $value)
+    public function __invoke(EloquentBuilder|QueryBuilder $builder, string $keyPathWithAlias)
     {
+        [$keyPath, $alias] = array_pad(explode(' as ', $keyPathWithAlias), 2, null);
+        $alias = $alias ?? str_replace(['->', '.'], '_', $keyPath);
+
         $driver = $builder->getConnection()->getDriverName();
         $column = $this->extractColumn($keyPath);
         $path   = $this->extractJsonPath($keyPath);
 
         switch ($driver) {
             case 'mysql':
-                $jsonExpr = "JSON_UNQUOTE(JSON_EXTRACT($column, '$.$path'))";
+                $expr = "JSON_UNQUOTE(JSON_EXTRACT($column, '$.$path')) as $alias";
                 break;
-
             case 'pgsql':
-                $jsonExpr = $this->pgJsonExpression($keyPath);
+                $expr = "{$this->pgJsonExpression($keyPath)} as $alias";
                 break;
-
             default:
-                // Fallback for SQLite or unsupported drivers
-                $jsonExpr = "$column LIKE ?";
-                $value = "%{$value}%";
+                $expr = "$column as $alias";
         }
 
-        return $builder->whereRaw("$jsonExpr {$operator} ?", [$value]);
+        return $builder->selectRaw($expr);
     }
 
     protected function extractColumn(string $keyPath): string
