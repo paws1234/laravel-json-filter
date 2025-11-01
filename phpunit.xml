@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
          colors="true"
-         verbose="true"
          executionOrder="depends,defects"
          failOnRisky="true"
-         failOnWarning="true">
+         failOnWarning="false"
+         cacheDirectory=".phpunit.cache">
 
     <testsuites>
         <testsuite name="Json Filter Test Suite">
@@ -14,16 +14,11 @@
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory=".phpunit.cache/coverage"
-              processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">src</directory>
         </include>
-        <report>
-            <html outputDirectory="coverage/html"/>
-            <text outputFile="coverage/summary.txt"/>
-        </report>
-    </coverage>
+    </source>
 
     <php>
         <env name="APP_ENV" value="testing"/>

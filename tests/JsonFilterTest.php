@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class JsonFilterTest extends TestCase
 {
-    /** @test */
-    public function it_applies_mysql_or_pgsql_json_filter_correctly()
+    public function test_it_applies_mysql_or_pgsql_json_filter_correctly(): void
     {
         $driver = DB::getDriverName();
         $builder = User::query()->jsonFilter('meta->status', '=', 'active');
@@ -25,8 +24,7 @@ class JsonFilterTest extends TestCase
         }
     }
 
-    /** @test */
-    public function it_can_filter_nested_json_paths()
+    public function test_it_can_filter_nested_json_paths(): void
     {
         $driver = DB::getDriverName();
         $builder = User::query()->jsonFilter('meta->details->region', '=', 'cebu');

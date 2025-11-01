@@ -17,8 +17,7 @@ class SelectAllTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function it_maintains_select_all_functionality_when_using_pluck()
+    public function test_it_maintains_select_all_functionality_when_using_pluck(): void
     {
         if (DB::connection()->getDriverName() === 'sqlite') {
             $this->markTestSkipped('SQLite does not support JSON queries.');
@@ -34,8 +33,7 @@ class SelectAllTest extends TestCase
         $this->assertEquals([1], $ids);
     }
 
-    /** @test */
-    public function it_maintains_select_all_functionality_when_chaining_multiple_macros()
+    public function test_it_maintains_select_all_functionality_when_chaining_multiple_macros(): void
     {
         if (DB::connection()->getDriverName() === 'sqlite') {
             $this->markTestSkipped('SQLite does not support JSON queries.');
@@ -59,8 +57,7 @@ class SelectAllTest extends TestCase
         $this->assertEquals('active', $meta['status']);
     }
 
-    /** @test */
-    public function it_works_with_explicit_select_statements()
+    public function test_it_works_with_explicit_select_statements(): void
     {
         if (DB::connection()->getDriverName() === 'sqlite') {
             $this->markTestSkipped('SQLite does not support JSON queries.');
