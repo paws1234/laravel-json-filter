@@ -19,13 +19,30 @@ A Laravel package that provides truly universal JSON/Document querying macros fo
 
 ## Installation
 
-You can install the package via Composer:
+### Basic Installation
+
+Install the package via Composer:
 
 ```bash
 composer require pawsmedz/laravel-json-filter
 ```
 
 The package will automatically register its service provider via Laravel's auto-discovery feature.
+
+### With MongoDB Support (Optional)
+
+If you want to use MongoDB, install the package along with the appropriate MongoDB driver:
+
+```bash
+# Laravel 9.x with MongoDB
+composer require pawsmedz/laravel-json-filter jenssegers/mongodb:^4.0
+
+# Laravel 10.x - 11.x with MongoDB  
+composer require pawsmedz/laravel-json-filter mongodb/laravel-mongodb:^4.0
+
+# Laravel 12.x with MongoDB
+composer require pawsmedz/laravel-json-filter mongodb/laravel-mongodb:^5.1
+```
 
 ## Usage
 
@@ -156,6 +173,37 @@ $results = User::query()
     ->get();
 ```
 
+### MongoDB Example
+
+When using MongoDB (after installing the appropriate package), the same API works seamlessly:
+
+```php
+use MongoDB\Laravel\Eloquent\Model as Eloquent;
+
+class MongoUser extends Eloquent
+{
+    protected $connection = 'mongodb';
+    protected $collection = 'users';
+}
+
+// Same exact syntax works with MongoDB!
+$mongoUsers = MongoUser::query()
+    ->jsonFilter('profile.country', '=', 'US')           // Uses native MongoDB queries
+    ->jsonContains('skills', 'php')                     // Regex search in MongoDB
+    ->jsonExists('subscription.plan')                   // Field exists check
+    ->jsonOrderBy('profile.score', 'desc')              // MongoDB sorting
+    ->get();
+
+// Complex MongoDB queries with the same API
+$results = MongoUser::query()
+    ->jsonFilter('status', '=', 'active')
+    ->jsonWhereIn('subscription.plan', ['pro', 'enterprise'])
+    ->jsonContains('bio', 'developer')
+    ->jsonSelect('profile.name as name')
+    ->jsonSelect('subscription.plan as plan')
+    ->get();
+```
+
 ## Universal Database Support
 
 The package automatically detects your database type and uses the optimal query strategy:
@@ -221,16 +269,29 @@ User::jsonFilter('profile->country', '=', 'US')
 
 ## Optional Database Packages
 
-For enhanced NoSQL support, install the relevant packages:
+### MongoDB Support
+
+The package supports MongoDB as an optional feature. Install the appropriate MongoDB package based on your Laravel version:
 
 ```bash
-# For MongoDB
-composer require jenssegers/mongodb
+# Laravel 9.x
+composer require jenssegers/mongodb:^4.0
 
-# Alternative MongoDB package  
-composer require laravel-mongodb/laravel-mongodb
+# Laravel 10.x - 11.x
+composer require mongodb/laravel-mongodb:^4.0
 
-# More database packages as needed
+# Laravel 12.x
+composer require mongodb/laravel-mongodb:^5.1
+```
+
+**Note:** MongoDB support is completely optional. The package works perfectly with MySQL, PostgreSQL, and SQLite without any additional dependencies.
+
+### Other NoSQL Databases
+
+Support for additional NoSQL databases can be added with custom adapters:
+
+```bash
+# More database packages as needed when adapters are available
 ```
 
 ## Extending Support
