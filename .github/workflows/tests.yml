@@ -11,10 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         php: [8.1, 8.2, 8.3]
         laravel: [9.*, 10.*, 11.*]
         db: [mysql, pgsql]
+        exclude:
+          # Exclude unsupported combos
+          - php: 8.1
+            laravel: 11.*
 
     services:
       mysql:
@@ -24,10 +29,7 @@ jobs:
         ports: ["3306:3306"]
         options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
+          --health-interval=10s --health-timeout=5s --health-retries=3
       postgres:
         image: postgres:14
         env:
@@ -49,6 +51,13 @@ jobs:
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-update
+          if [[ "${{ matrix.laravel }}" == 9* ]]; then
+            composer require orchestra/testbench:^7.0 --no-update
+          elif [[ "${{ matrix.laravel }}" == 10* ]]; then
+            composer require orchestra/testbench:^8.0 --no-update
+          else
+            composer require orchestra/testbench:^9.0 --no-update
+          fi
           composer update --prefer-dist --no-interaction
 
       - name: Run Tests
