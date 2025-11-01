@@ -16,11 +16,13 @@ jobs:
       fail-fast: false
       matrix:
         php: [8.1, 8.2, 8.3]
-        laravel: [9.*, 10.*, 11.*]
+        laravel: [9.*, 10.*, 11.*, 12.*]
         db: [mysql, pgsql]
         exclude:
           - php: 8.1
             laravel: 11.*
+          - php: 8.1
+            laravel: 12.*
 
     services:
       mysql:
@@ -65,8 +67,10 @@ jobs:
             composer require orchestra/testbench:^7.0 --no-update
           elif [[ "${{ matrix.laravel }}" == 10* ]]; then
             composer require orchestra/testbench:^8.0 --no-update
-          else
+          elif [[ "${{ matrix.laravel }}" == 11* ]]; then
             composer require orchestra/testbench:^9.0 --no-update
+          else
+            composer require orchestra/testbench:^10.0 --no-update
           fi
           composer update --prefer-dist --no-interaction
 

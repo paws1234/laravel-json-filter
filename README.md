@@ -13,7 +13,7 @@ A Laravel package that provides fluent, database-agnostic JSON querying macros f
 - 🚀 **Multiple Macros**: Filter, select, order, search, and check existence
 - 🔧 **Easy Integration**: Auto-discovery service provider
 - 🧪 **Well Tested**: Comprehensive test suite
-- 📦 **Laravel Compatible**: Supports Laravel 9.x, 10.x, and 11.x
+- 📦 **Laravel Compatible**: Supports Laravel 9.x, 10.x, 11.x, and 12.x
 
 ## Installation
 
@@ -182,7 +182,7 @@ Falls back to basic column operations for compatibility.
 ## Requirements
 
 - PHP 8.1 or higher
-- Laravel 9.x, 10.x, or 11.x
+- Laravel 9.x, 10.x, 11.x, or 12.x
 - MySQL, PostgreSQL, or SQLite database
 
 ## Testing

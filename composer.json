@@ -1,7 +1,7 @@
 {
     "name": "pawsmedz/laravel-json-filter",
-    "description": "Dynamic JSON filtering for Eloquent Builder (MySQL & PostgreSQL).",
-    "keywords": ["laravel", "json", "eloquent", "filter", "query"],
+    "description": "Dynamic JSON filtering for Eloquent Builder with Laravel 9-12 support (MySQL, PostgreSQL & SQLite).",
+    "keywords": ["laravel", "laravel-12", "json", "eloquent", "filter", "query", "mysql", "postgresql", "sqlite"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -11,13 +11,13 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "illuminate/database": "^9.0|^10.0|^11.0",
-        "illuminate/support": "^9.0|^10.0|^11.0"
+        "php": "^8.1|^8.2|^8.3",
+        "illuminate/database": "^9.0|^10.0|^11.0|^12.0",
+        "illuminate/support": "^9.0|^10.0|^11.0|^12.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^7.0|^8.0",
-        "phpunit/phpunit": "^9.6|^10.0"
+        "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
+        "phpunit/phpunit": "^9.6|^10.0|^11.0"
     },
     "autoload": {
         "psr-4": {
@@ -38,7 +38,10 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit --colors=always",
-        "test:coverage": "vendor/bin/phpunit --coverage-html coverage/html --coverage-text"
+        "test:coverage": "vendor/bin/phpunit --coverage-html coverage/html --coverage-text",
+        "test:laravel-12": "vendor/bin/phpunit --colors=always --group laravel-12",
+        "analyze": "vendor/bin/phpstan analyse src tests --level=5",
+        "format": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php"
     },
     "minimum-stability": "stable",
     "prefer-stable": true
