@@ -1,6 +1,10 @@
-# Laravel JSON Filter
+# 🧩 Laravel JSON Filter
 
-Dynamic JSON column filtering for Eloquent Builder — supports **MySQL** and **PostgreSQL**.
+**Dynamic JSON filtering for Eloquent Builder (MySQL & PostgreSQL).**
+
+This package adds a `jsonFilter()` macro to Laravel’s Eloquent query builder,  
+allowing you to query JSON columns using a clean and expressive syntax —  
+no raw SQL required.
 
 ---
 
