@@ -6,9 +6,10 @@ All notable changes to `laravel-json-filter` will be documented in this file.
 
 ### Added
 - Laravel 12.x support
-- Extended PHP version support to include PHP 8.3
+- PHP 8.4 support
+- Extended PHP version support to include PHP 8.3 and PHP 8.4
 - Updated Orchestra Testbench support for Laravel 12 testing
-- Enhanced CI/CD pipeline to test against Laravel 12
+- Enhanced CI/CD pipeline to test against Laravel 12 and PHP 8.4
 
 ### Changed
 - Updated composer dependencies to support Laravel 12.x
@@ -16,7 +17,7 @@ All notable changes to `laravel-json-filter` will be documented in this file.
 - Updated documentation to reflect Laravel 12 compatibility
 
 ### Compatibility
-- PHP: ^8.1|^8.2|^8.3
+- PHP: ^8.1|^8.2|^8.3|^8.4
 - Laravel: ^9.0|^10.0|^11.0|^12.0
 - Orchestra Testbench: ^7.0|^8.0|^9.0|^10.0
 - PHPUnit: ^9.6|^10.0|^11.0
