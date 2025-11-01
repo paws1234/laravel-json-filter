@@ -7,8 +7,12 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class JsonContainsMacro
 {
+    use JsonMacroTrait;
+
     public function __invoke(EloquentBuilder|QueryBuilder $builder, string $keyPath, string $search)
     {
+        $this->ensureSelectAll($builder);
+        
         $driver = $builder->getConnection()->getDriverName();
         $column = $this->extractColumn($keyPath);
         $path   = $this->extractJsonPath($keyPath);
@@ -25,31 +29,5 @@ class JsonContainsMacro
             default:
                 return $builder->where($column, 'LIKE', "%{$search}%");
         }
-    }
-
-    protected function extractColumn(string $keyPath): string
-    {
-        return explode('->', $keyPath)[0];
-    }
-
-    protected function extractJsonPath(string $keyPath): string
-    {
-        $parts = explode('->', $keyPath);
-        array_shift($parts);
-        return implode('.', $parts);
-    }
-
-    protected function pgJsonExpression(string $keyPath): string
-    {
-        $segments = explode('->', $keyPath);
-        $column = array_shift($segments);
-        $expr = $column;
-
-        foreach ($segments as $i => $seg) {
-            $arrow = $i === count($segments) - 1 ? '->>' : '->';
-            $expr .= "{$arrow}'{$seg}'";
-        }
-
-        return $expr;
     }
 }

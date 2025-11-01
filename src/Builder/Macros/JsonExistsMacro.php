@@ -7,8 +7,12 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class JsonExistsMacro
 {
+    use JsonMacroTrait;
+
     public function __invoke(EloquentBuilder|QueryBuilder $builder, string $keyPath)
     {
+        $this->ensureSelectAll($builder);
+        
         $driver = $builder->getConnection()->getDriverName();
         $column = $this->extractColumn($keyPath);
         $path   = $this->extractJsonPath($keyPath);
@@ -22,31 +26,5 @@ class JsonExistsMacro
             default:
                 return $builder->whereNotNull($column);
         }
-    }
-
-    protected function extractColumn(string $keyPath): string
-    {
-        return explode('->', $keyPath)[0];
-    }
-
-    protected function extractJsonPath(string $keyPath): string
-    {
-        $parts = explode('->', $keyPath);
-        array_shift($parts);
-        return implode('.', $parts);
-    }
-
-    protected function pgJsonExpression(string $keyPath): string
-    {
-        $segments = explode('->', $keyPath);
-        $column = array_shift($segments);
-        $expr = $column;
-
-        foreach ($segments as $i => $seg) {
-            $arrow = $i === count($segments) - 1 ? '->>' : '->';
-            $expr .= "{$arrow}'{$seg}'";
-        }
-
-        return $expr;
     }
 }
