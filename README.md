@@ -14,7 +14,7 @@ A Laravel package that provides truly universal JSON/Document querying macros fo
 - 🚀 **Extensible**: Easy to add new database adapters
 - 🔧 **Zero Configuration**: Auto-discovery service provider with intelligent adapter selection
 - 🧪 **Well Tested**: Comprehensive test suite across multiple database types  
-- 📦 **Laravel Compatible**: Supports Laravel 9.x, 10.x, and 11.x
+- 📦 **Laravel Compatible**: Supports Laravel 9.x, 10.x, 11.x, and 12.x
 - ⚡ **Performance Optimized**: Database-specific optimizations for each adapter
 
 ## Installation
@@ -216,7 +216,7 @@ User::jsonFilter('profile->country', '=', 'US')
 ## Requirements
 
 - PHP 8.1 or higher
-- Laravel 9.x, 10.x, or 11.x
+- Laravel 9.x, 10.x, 11.x, or 12.x
 - Any supported database (MySQL, PostgreSQL, SQLite, MongoDB, etc.)
 
 ## Optional Database Packages
