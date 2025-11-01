@@ -26,8 +26,7 @@ class JsonMacroTest extends TestCase
         }
     }
 
-    /** @test */
-    public function it_filters_records_by_json_key_value_using_jsonFilter()
+    public function test_it_filters_records_by_json_key_value_using_jsonFilter(): void
     {
         $this->skipIfUnsupported();
 
@@ -39,8 +38,7 @@ class JsonMacroTest extends TestCase
         $this->assertStringContainsString('active', $results->first()->meta);
     }
 
-    /** @test */
-    public function it_orders_records_by_json_value_using_jsonOrderBy()
+    public function test_it_orders_records_by_json_value_using_jsonOrderBy(): void
     {
         $this->skipIfUnsupported();
 
@@ -54,8 +52,7 @@ class JsonMacroTest extends TestCase
         $this->assertTrue($first >= $last);
     }
 
-    /** @test */
-    public function it_filters_using_jsonWhereIn()
+    public function test_it_filters_using_jsonWhereIn(): void
     {
         $this->skipIfUnsupported();
 
@@ -66,8 +63,7 @@ class JsonMacroTest extends TestCase
         $this->assertCount(2, $results);
     }
 
-    /** @test */
-    public function it_filters_using_jsonContains()
+    public function test_it_filters_using_jsonContains(): void
     {
         $this->skipIfUnsupported();
 
@@ -78,8 +74,7 @@ class JsonMacroTest extends TestCase
         $this->assertGreaterThanOrEqual(1, $results->count());
     }
 
-    /** @test */
-    public function it_checks_if_json_path_exists()
+    public function test_it_checks_if_json_path_exists(): void
     {
         $this->skipIfUnsupported();
 
@@ -90,8 +85,7 @@ class JsonMacroTest extends TestCase
         $this->assertTrue($results->count() > 0);
     }
 
-    /** @test */
-    public function it_can_select_json_key_as_alias()
+    public function test_it_can_select_json_key_as_alias(): void
     {
         $this->skipIfUnsupported();
 
