@@ -11,14 +11,14 @@ use Pawsmedz\JsonFilter\Builder\Macros\{
     JsonWhereInMacro,
     JsonContainsMacro,
     JsonExistsMacro,
-    JsonSelectMacro,
-    UnifiedJsonFilterMacro,
-    UnifiedJsonWhereInMacro,
-    UnifiedJsonContainsMacro,
-    UnifiedJsonExistsMacro,
-    UnifiedJsonOrderByMacro,
-    UnifiedJsonSelectMacro
+    JsonSelectMacro
 };
+use Pawsmedz\JsonFilter\Builder\Macros\UnifiedJsonFilterMacro;
+use Pawsmedz\JsonFilter\Builder\Macros\UnifiedJsonWhereInMacro;
+use Pawsmedz\JsonFilter\Builder\Macros\UnifiedJsonContainsMacro;
+use Pawsmedz\JsonFilter\Builder\Macros\UnifiedJsonExistsMacro;
+use Pawsmedz\JsonFilter\Builder\Macros\UnifiedJsonOrderByMacro;
+use Pawsmedz\JsonFilter\Builder\Macros\UnifiedJsonSelectMacro;
 
 class UnifiedJsonFilterServiceProvider extends ServiceProvider
 {
