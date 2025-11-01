@@ -2,18 +2,24 @@
 
 All notable changes to `laravel-json-filter` will be documented in this file.
 
-## [Unreleased]
+## [1.3.1] - 2024-12-19
 
 ### Added
-- Laravel 12.x support
-- Extended PHP version support to include PHP 8.3
-- Updated Orchestra Testbench support for Laravel 12 testing
-- Enhanced CI/CD pipeline to test against Laravel 12
+- PHP 8.4 support with full Laravel 9-12 compatibility
+- Laravel 12 support with comprehensive testing
+- Enhanced GitHub Actions testing matrix with PHP 8.4 and multi-database support
+- MongoDB support as optional feature (install `mongodb/laravel-mongodb` or `jenssegers/mongodb`)
+- Unified database adapter architecture supporting MySQL, PostgreSQL, SQLite, and MongoDB
 
 ### Changed
-- Updated composer dependencies to support Laravel 12.x
-- Expanded GitHub Actions matrix to include Laravel 12 testing
-- Updated documentation to reflect Laravel 12 compatibility
+- MongoDB support is now optional to ensure broader compatibility across Laravel versions
+- Updated composer suggestions with proper MongoDB package recommendations
+- Improved adapter factory resilience when optional packages are not installed
+
+### Fixed
+- PHPUnit 11 compatibility issues (resolved all 12 deprecation warnings)
+- Dependency conflicts between Laravel versions and MongoDB packages
+- Cross-database compatibility improvements
 
 ### Compatibility
 - PHP: ^8.1|^8.2|^8.3

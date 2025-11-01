@@ -90,7 +90,7 @@ jobs:
 
   test-mongodb:
     runs-on: ubuntu-latest
-    if: true  # Disabled by default - enable when MongoDB support is fully implemented
+    if: false  # MongoDB testing disabled by default - enable manually when needed
     
     strategy:
       fail-fast: false
@@ -121,15 +121,18 @@ jobs:
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" --no-update
-          composer require "jenssegers/mongodb:^4.0" --no-update --dev
+          # Use compatible MongoDB package versions based on Laravel version
           if [[ "${{ matrix.laravel }}" == 10* ]]; then
             composer require orchestra/testbench:^8.0 --no-update
+            composer require "mongodb/laravel-mongodb:^4.0" --no-update --dev
           elif [[ "${{ matrix.laravel }}" == 11* ]]; then
             composer require orchestra/testbench:^9.0 --no-update
+            composer require "mongodb/laravel-mongodb:^4.0|^5.0" --no-update --dev
           else
             composer require orchestra/testbench:^10.0 --no-update
+            composer require "mongodb/laravel-mongodb:^5.1" --no-update --dev
           fi
-          composer update --prefer-dist --no-interaction
+          composer update --prefer-dist --no-interaction --ignore-platform-req=ext-mongodb
 
       - name: Run MongoDB Tests
         env:

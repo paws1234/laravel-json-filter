@@ -11,9 +11,15 @@ class MongoDbQuickTest extends TestCase
     {
         parent::setUp();
         
-        // Skip if MongoDB not available
+        // Skip if MongoDB extension not available
         if (!extension_loaded('mongodb')) {
             $this->markTestSkipped('MongoDB extension not available');
+        }
+        
+        // Skip if MongoDB packages not available
+        if (!class_exists('\MongoDB\Laravel\Eloquent\Model') && 
+            !class_exists('\Jenssegers\Mongodb\Eloquent\Model')) {
+            $this->markTestSkipped('MongoDB Laravel package not available');
         }
         
         // Try to connect to MongoDB

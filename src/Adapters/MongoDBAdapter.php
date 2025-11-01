@@ -15,6 +15,12 @@ class MongoDBAdapter extends DatabaseAdapter
     public function supports(EloquentBuilder|QueryBuilder $builder): bool
     {
         try {
+            // Check if MongoDB packages are available
+            if (!class_exists('\MongoDB\Laravel\Eloquent\Model') && 
+                !class_exists('\Jenssegers\Mongodb\Eloquent\Model')) {
+                return false;
+            }
+            
             // Check for MongoDB connection
             $connectionClass = get_class($builder->getConnection());
             return str_contains($connectionClass, 'Mongo') || 

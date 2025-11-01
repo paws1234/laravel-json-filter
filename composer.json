@@ -17,8 +17,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
-        "phpunit/phpunit": "^9.6|^10.0|^11.0",
-        "mongodb/laravel-mongodb": "^5.1"
+        "phpunit/phpunit": "^9.6|^10.0|^11.0"
     },
     "autoload": {
         "psr-4": {
@@ -37,8 +36,8 @@
             ]
         },
         "suggest": {
-            "jenssegers/mongodb": "For MongoDB support",
-            "laravel-mongodb/laravel-mongodb": "Alternative MongoDB package"
+            "mongodb/laravel-mongodb": "For MongoDB support (Laravel 10+): ^4.0|^5.0",
+            "jenssegers/mongodb": "For MongoDB support (Laravel 9): ^4.0"
         }
     },
     "scripts": {
