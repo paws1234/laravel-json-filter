@@ -1,14 +1,17 @@
-# 🧩 Laravel JSON Filter
+## 💡 Comprehensive Usage Guide
 
-**Dynamic JSON filtering for Eloquent Builder (MySQL & PostgreSQL).**
+The `jsonFilter()` macro adds a fluent, driver-agnostic way to query JSON fields in Laravel.
 
-This package adds a `jsonFilter()` macro to Laravel’s Eloquent query builder,  
-allowing you to query JSON columns using a clean and expressive syntax —  
-no raw SQL required.
+It automatically detects whether you're using **MySQL** or **PostgreSQL** and translates  
+your filter to the correct syntax — so you can focus on clean, expressive Eloquent queries.
 
 ---
 
-## 🚀 Installation
+### 🧱 Basic Example
 
-```bash
-composer require pawsmedz/laravel-json-filter
+```php
+use App\Models\User;
+
+$activeUsers = User::query()
+    ->jsonFilter('meta->status', '=', 'active')
+    ->get();
