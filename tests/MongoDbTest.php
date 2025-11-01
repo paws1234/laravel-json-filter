@@ -3,9 +3,8 @@
 namespace Pawsmedz\JsonFilter\Tests;
 
 use Illuminate\Support\Facades\DB;
-use MongoDB\Laravel\Eloquent\Model as MongoModel;
 
-class MongoDbQuickTest extends TestCase
+class MongoDbTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -22,21 +21,31 @@ class MongoDbQuickTest extends TestCase
             $this->markTestSkipped('MongoDB Laravel package not available');
         }
         
-        // Try to connect to MongoDB
+        // Try to connect to MongoDB - skip if not available
         try {
+            // This will fail gracefully if MongoDB is not configured or running
             $connection = DB::connection('mongodb');
             $connection->table('test')->limit(1)->get();
         } catch (\Exception $e) {
-            $this->markTestSkipped('MongoDB not available: ' . $e->getMessage());
+            $this->markTestSkipped('MongoDB not available or not configured: ' . $e->getMessage());
         }
     }
 
     protected function getPackageProviders($app)
     {
-        return [
+        $providers = [
             \Pawsmedz\JsonFilter\UnifiedJsonFilterServiceProvider::class,
-            \MongoDB\Laravel\MongoDBServiceProvider::class, 
         ];
+        
+        // Add MongoDB service provider if available
+        if (class_exists('\MongoDB\Laravel\MongoDBServiceProvider')) {
+            $providers[] = \MongoDB\Laravel\MongoDBServiceProvider::class;
+        } elseif (class_exists('\Jenssegers\Mongodb\MongodbServiceProvider')) {
+            // Note: Jenssegers has different casing for MongodbServiceProvider
+            $providers[] = \Jenssegers\Mongodb\MongodbServiceProvider::class;
+        }
+        
+        return $providers;
     }
 
     protected function getEnvironmentSetUp($app)
@@ -50,8 +59,6 @@ class MongoDbQuickTest extends TestCase
             'port' => 27017,
             'database' => 'test',
         ]);
-        
-        $app['config']->set('database.default', 'mongodb');
     }
 
     public function test_mongodb_connection_works(): void
@@ -65,7 +72,8 @@ class MongoDbQuickTest extends TestCase
 
     public function test_mongodb_adapter_detection(): void
     {
-        $builder = MongoUser::query();
+        // Use query builder directly
+        $builder = DB::connection('mongodb')->table('users');
         $adapter = \Pawsmedz\JsonFilter\Adapters\AdapterFactory::getAdapter($builder);
         
         echo "\n🔍 Detected adapter: " . get_class($adapter) . "\n";
@@ -91,12 +99,4 @@ class MongoDbQuickTest extends TestCase
         
         DB::connection('mongodb')->table('users')->truncate();
     }
-}
-
-// Simple MongoDB User model for testing
-class MongoUser extends MongoModel
-{
-    protected $connection = 'mongodb';
-    protected $collection = 'users';
-    protected $fillable = ['name', 'meta'];
 }
