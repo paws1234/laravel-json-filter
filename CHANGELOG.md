@@ -2,7 +2,9 @@
 
 All notable changes to `laravel-json-filter` will be documented in this file.
 
-## [1.3.1] - 2024-12-19
+## [Unreleased]
+
+## [1.3.1] - 2025-11-01
 
 ### Added
 - PHP 8.4 support with full Laravel 9-12 compatibility
@@ -23,6 +25,11 @@ All notable changes to `laravel-json-filter` will be documented in this file.
 - PHPUnit 11 compatibility issues (resolved all 12 deprecation warnings)
 - Dependency conflicts between Laravel versions and MongoDB packages
 - Cross-database compatibility improvements
+
+### Fixed
+- PHPUnit 11 compatibility issues and deprecation warnings
+- Test method naming conventions updated for PHPUnit 11
+- PHPUnit configuration schema updated to latest version
 
 ### Compatibility
 - PHP: ^8.1|^8.2|^8.3|^8.4
